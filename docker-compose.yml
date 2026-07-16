@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # 1. SERVİS: PostgreSQL Veritabanı
+  db:
+    image: postgres:15-alpine
+    container_name: staj_db
+    restart: always
+    environment:
+      POSTGRES_DB: stajdb
+      POSTGRES_USER: stajuser
+      POSTGRES_PASSWORD: stajpass
+    ports:
+      - "5432:5432"
+    volumes:
+      # Veritabanı dosyalarının konteyner silinse bile kaybolmaması için kalıcı hacim (Volume) tanımlıyoruz
+      - pgdata:/var/lib/postgresql/data
+
+  # 2. SERVİS: Bizim Java Uygulamamız
+  app:
+    # Dockerfile dosyasını bulunduğumuz dizinde bulup otomatik build edecek
+    build: .
+    container_name: staj_app
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      # Sunucumuzdaki /data klasörünü konteyner içindeki /app/data klasörüne bağlıyoruz (Volume Köprüsü)
+      - ./data:/app/data
+
+volumes:
+  pgdata: # Kalıcı veritabanı depolama alanı
