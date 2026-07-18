@@ -23,7 +23,7 @@ pipeline {
         stage('Uygulamayı Ayağa Kaldır') {
             steps {
                 echo 'Sistem güncelleniyor ve başlatılıyor...'
-                sh 'docker-compose up -d --build staj_app'
+                sh 'docker compose up -d --build staj_app'
             }
         }
     }
