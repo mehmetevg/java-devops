@@ -22,8 +22,8 @@ pipeline {
         }
         stage('Uygulamayı Ayağa Kaldır') {
             steps {
-                echo 'Konteyner başlatılıyor...'
-                sh 'docker run -d -p 8000:8000 --name staj_app staj_uygulamasi-app:latest'
+                echo 'Sistem güncelleniyor ve başlatılıyor...'
+                sh 'docker-compose up -d --build staj_app'
             }
         }
     }
