@@ -17,7 +17,7 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   # 2. SERVİS: Bizim Java Uygulamamız
-  app:
+  staj_app:
     # Dockerfile dosyasını bulunduğumuz dizinde bulup otomatik build edecek
     build: .
     container_name: staj_app
