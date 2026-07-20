@@ -15,6 +15,7 @@ services:
     volumes:
       # Veritabanı dosyalarının konteyner silinse bile kaybolmaması için kalıcı hacim (Volume) tanımlıyoruz
       - pgdata:/var/lib/postgresql/data
+      zabbix_data
 
   # 2. SERVİS: Bizim Java Uygulamamız
   staj_app:
