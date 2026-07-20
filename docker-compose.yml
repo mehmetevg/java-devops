@@ -30,8 +30,6 @@ services:
       # Sunucumuzdaki /data klasörünü konteyner içindeki /app/data klasörüne bağlıyoruz (Volume Köprüsü)
       - ./data:/app/data
 
-volumes:
-  pgdata: # Kalıcı veritabanı depolama alanı
   zabbix-db:
     image: postgres:15-alpine
     container_name: zabbix_db
@@ -84,7 +82,5 @@ volumes:
     restart: always
     privileged: true
     pid: "host"
-volumes:
-  zabbix_data:    
-
-  
+    volumes:
+    zabbix_data:
