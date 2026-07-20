@@ -32,3 +32,57 @@ services:
 
 volumes:
   pgdata: # Kalıcı veritabanı depolama alanı
+  zabbix-db:
+    image: postgres:15-alpine
+    container_name: zabbix_db
+    environment:
+      - POSTGRES_USER=zabbix
+      - POSTGRES_PASSWORD=zabbix_sifre
+      - POSTGRES_DB=zabbix
+    volumes:
+      - zabbix_data:/var/lib/postgresql/data
+    restart: always
+
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql:alpine-6.4-latest
+    container_name: zabbix_server
+    ports:
+      - "10051:10051"
+    environment:
+      - DB_SERVER_HOST=zabbix-db
+      - POSTGRES_USER=zabbix
+      - POSTGRES_PASSWORD=zabbix_sifre
+      - POSTGRES_DB=zabbix
+    depends_on:
+      - zabbix-db
+    restart: always
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-pgsql:alpine-6.4-latest
+    container_name: zabbix_web
+    ports:
+      - "8081:8080" # Zabbix paneline 8081 portundan gireceğiz ki uygulamanla çakışmasın
+    environment:
+      - DB_SERVER_HOST=zabbix-db
+      - POSTGRES_USER=zabbix
+      - POSTGRES_PASSWORD=zabbix_sifre
+      - POSTGRES_DB=zabbix
+      - ZBX_SERVER_HOST=zabbix-server
+      - PHP_TZ=Europe/Istanbul
+    depends_on:
+      - zabbix-server
+    restart: always
+
+  zabbix-agent:
+    image: zabbix/zabbix-agent:alpine-6.4-latest
+    container_name: zabbix_agent
+    ports:
+      - "10050:10050"
+    environment:
+      - ZBX_HOSTNAME=Zabbix server
+      - ZBX_SERVER_HOST=zabbix-server
+    restart: always
+    privileged: true
+    pid: "host"
+
+  
