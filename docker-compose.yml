@@ -84,5 +84,7 @@ volumes:
     restart: always
     privileged: true
     pid: "host"
+volumes:
+  zabbix_data:    
 
   
